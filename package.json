@@ -1,0 +1,16 @@
+{
+  "name": "anz_tech_challenge",
+  "version": "1.0.0",
+  "description": "Technical challenge for ANZ Bank",
+  "main": "application.js",
+  "scripts": {
+    "start": "node application.js"
+  },
+  "author": "Rajarshi Haldar",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "git-last-commit": "^1.0.1"
+  }
+}
