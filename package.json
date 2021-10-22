@@ -4,7 +4,8 @@
   "description": "Technical challenge for ANZ Bank",
   "main": "application.js",
   "scripts": {
-    "start": "node application.js"
+    "start": "node application.js",
+    "test": "mocha ./test/*.js --exit"
   },
   "author": "Rajarshi Haldar",
   "license": "ISC",
@@ -12,5 +13,10 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "git-last-commit": "^1.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3",
+    "request": "^2.88.2"
   }
 }

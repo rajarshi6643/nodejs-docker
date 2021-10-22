@@ -7,10 +7,9 @@ var git = require('git-last-commit');
 let apiResponse = {
   "version": "1.0.0",
   "build_sha": "abcd1234#",
-  "description" : "ANZ Bank technical test"
+  "description" : "pre-interview technical test"
 }
 
-// This responds with "Hello World" on the homepage
 app.get('/version', function (req, res) {
    console.log("Got a GET request for the homepage");
    git.getLastCommit(function(err, commit) {
