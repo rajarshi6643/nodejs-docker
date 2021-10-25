@@ -1,0 +1,33 @@
+# Node docker image on which our code would run
+image: node:14.18.1
+
+# #This command is run before all the jobs
+# before_script:
+#   - npm install
+
+stages:
+  - test
+  - buildimage
+  - deploy
+
+test:
+  stage: test
+  before_script:
+    - npm install
+  script:
+    - npm run test
+
+buildimage:
+  stage: buildimage
+  script:
+    - bash build_and_push_docker_image.sh
+
+deploy:
+  stage: deploy
+  before_script: 
+    - pip install awscli
+  script:
+    - aws eks --region ap-southeast-2 update-kubeconfig --name $EKS_CLUSTER_NAME
+    - bash deployments/deploy_to_eks.sh
+  only: # deployment occurs for code push only to main branch
+   - main
