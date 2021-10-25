@@ -25,10 +25,10 @@ buildimage:
   image: docker:20.10.9
   script:
     #- bash build_and_push_docker_image.sh
-    - sudo docker build -t anzbank-test-app .
-    - sudo docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - sudo docker tag anzbank-test-app $DOCKER_USERNAME/$REPO_NAME:anzbank-test-app
-    - sudo docker push $DOCKER_USERNAME/$REPO_NAME:anzbank-test-app
+    - docker build -t anzbank-test-app .
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - docker tag anzbank-test-app $DOCKER_USERNAME/$REPO_NAME:anzbank-test-app
+    - docker push $DOCKER_USERNAME/$REPO_NAME:anzbank-test-app
 
 deploy:
   stage: deploy
