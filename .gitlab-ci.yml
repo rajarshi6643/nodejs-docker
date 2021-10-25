@@ -14,6 +14,7 @@ test:
   stage: test
   before_script:
     - npm install
+    - chmod 0777 ./node_modules/.bin/mocha
   script:
     - npm run test
 
