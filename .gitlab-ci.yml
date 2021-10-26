@@ -1,0 +1,49 @@
+# Node docker image on which our code would run
+image: node:14.18.1
+
+# #This command is run before all the jobs
+# before_script:
+#   - npm install
+
+stages:
+  - test
+  - buildimage
+  - deploy
+
+test:
+  stage: test
+  before_script:
+    - npm install
+    - chmod 0777 ./node_modules/.bin/mocha
+  script:
+    - npm run test
+
+buildimage:
+  stage: buildimage
+  services:
+    - docker:20.10.9-dind
+  image: docker:20.10.9
+  script:
+    #- bash build_and_push_docker_image.sh
+    - docker build -t anzbank-test-app .
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - docker tag anzbank-test-app $DOCKER_USERNAME/$REPO_NAME:anzbank-test-app
+    - docker push $DOCKER_USERNAME/$REPO_NAME:anzbank-test-app
+    
+deploy:
+  stage: deploy
+  image: dtzar/helm-kubectl # This image has python and kubectl installed
+  before_script: 
+    - pip install awscli
+  script:
+    - aws eks --region ap-southeast-2 update-kubeconfig --name $EKS_CLUSTER_NAME
+    #- bash deployments/deploy_to_eks.sh
+    - kubectl create namespace technical-test
+    # Now execute the deployment manifest to deploy the application in the EKS cluster
+    - kubectl apply -f deployment.yml
+    #Now deploy the service as type:LoadBalancer so that it can provision a load balancer
+    # In the load balancer we would need to create a listener rule to redirect traffic reaching at port 80 to port 8080 
+    # and with URL rewriting as '/version'
+    - kubectl apply -f loadbalancer_service.yml
+  only: # deployment occurs for code push only to main branch
+   - main
