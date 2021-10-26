@@ -32,9 +32,11 @@ buildimage:
     
 deploy:
   stage: deploy
-  image: dtzar/helm-kubectl # This image has python and kubectl installed
-  before_script: 
-    - pip install awscli
+  image: doctrine/python-aws-cli-kubectl:2019-03-26-add-kubectl # This image has python 3, aws-cli and kubectl installed
+  # before_script:
+  #   - apt install python3.8
+  #   - apt install python3-pip
+  #   - pip install awscli
   script:
     - aws eks --region ap-southeast-2 update-kubeconfig --name $EKS_CLUSTER_NAME
     #- bash deployments/deploy_to_eks.sh
@@ -45,5 +47,8 @@ deploy:
     # In the load balancer we would need to create a listener rule to redirect traffic reaching at port 80 to port 8080 
     # and with URL rewriting as '/version'
     - kubectl apply -f loadbalancer_service.yml
-  only: # deployment occurs for code push only to main branch
+  dependencies:
+    - buildimage
+  when: manual  # Need manual approval before deployment. Based on requirement, manual approval may be removed.
+  only: # deployment stage gets executed for code push only to main branch
    - main
