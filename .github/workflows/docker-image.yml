@@ -20,5 +20,3 @@ jobs:
       run: docker build . --file Dockerfile --tag rajarshi-test-github-actions/nodejs
     - name: 'Push the Docker Image'
       run: docker push rajarshi-test-github-actions/nodejs
-        env:
-          CI: true
